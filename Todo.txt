@@ -1,0 +1,54 @@
+Grille:
+	Offre une variable privée (mais ajustable dans l'inspecteur) int nbRows qui spécifie le nombre de lignes de la Grille au lancement du jeu
+	Offre une variable privée (mais ajustable dans l'inspecteur) int nbColumns qui spécifie le nombre de colonnes de la Grille au lancement du jeu
+	Maintient une liste (array) privée des Cases (des objets de la classe Cell) de la Grille
+	Maintient une liste (linked list) privée des Cases qui composent le chemin
+	Définit la Struct Cell qui maintient des informations telles que:
+		- La prochaine Case (Cell nextCell)
+		- Un booléen qui détermine s'il s'agit de la Case finale (bool endCell)
+		- Un booléen qui détermine si une Tour est placée sur la case (bool hasTower)
+		- Un booléen qui détermine si une tour peut être placée sur une case ou s'il s'agit du chemin (bool isPath)
+		- Offre une fonction GetNextCell() qui retourne la prochaine Case du chemin
+	Offre une fonction publique Cell GetCell(Vector2 coordinates) qui retourne la Case de la Grille aux coordonnées spécifiées
+	Offre une fonction GetFirstCell() qui retourne la première case du chemin
+	Offre une fonction publique void AddTower(Cell cell) qui assigne la valeur true à la variable hasTower d'un objet Cell
+	Offre une fonction publique bool CanPlaceTower(Cell cell) qui retourne true s'il est possible de placer une Tour sur la Case sélectionnée de la Grille, false autrement. Il est possible de placer une tour sur une case si:
+		-Il ne s'agit pas d'une des case du chemin (vérifier la valeur de isPath pour savoir si une tour est déjà placée sur la Case)
+		-La Case n'est pas déjà occupée par une Tour (vérifier la valeur de hasTower pour savoir si une Tour est déjà placée sur la Case)
+
+Ennemis:
+	Dispose d'un prefab
+	La racine du prefab a le tag "Ennemi"
+	La racine du prefab a un collider
+	Maintient une variable privée int hitpoints (mais ajustable dans l'inspecteur) qui contient le nombre de point de vie de l'Ennemi
+	Maintient une variable privée Cell currentCell qui contient la Case sur laquelle se trouve actuellement l'Ennemi
+	Maintient une variable privée Cell targetCell qui contient la Case vers laquelle l'Ennemi se dirige
+	Offre une fonction publique void SetCurrentCell(Cell cell) qui permet d'indiquer sur quelle Case se trouve actuellement l'Ennemi (cette fonction sera appelée à la création de l'Ennemi pour lui indiquer sur quelle Case il se trouve)
+	Se déplace constamment vers la prochaine Case en direction de la fin de la Grille (obtient la prochaine Case en faisant appel à la fonction GetNextCell(Cell currentCell)
+	Lorsque la Case de destination est atteinte, les valeurs des variables currentCell et targetCell sont mises à jour (on obtient la prochaine Case en faisant appel à la fonction GetNextCell(Cell currentCell))
+	Disparait lorsqu'il atteint la Case finale sur la Grille
+	Diminue la valeur de la variable hitpoint de 1 lors d'une collision avec un object portant le tag "Projectile"
+	Disparait lorsque la valeur de la variable hitpoint est inférieure ou égale à 0
+	Fait disparaître le Projectile lors d'une collision avec un object portant le tag "Projectile"
+
+Tours:
+	Dispose d'un prefab
+	Sélectionne l'Ennemi (l'objet portant de tag "Ennemi") vivant le plus proche
+	Tir des Projectiles en direction de l'Ennemi sélectionné
+
+Projectiles:
+	Dispose d'un prefab
+	La racine du prefab a le tag "Projectile"
+	La racine du prefab a un collider
+
+Créateur d'Ennemis:
+	Au lancement du jeu fait appel à la fonction publique GetFirstCell() de la Grille pour déterminer la Case de début
+	Crée des Ennemis sur la Case de début de la Grille
+	Crée des Ennemis à un rythme ajustable dans l'inspecteur
+	Assigne la Case de début de la Grille aux objets Ennemis créés en faisant appel à leur fonction publique SetCurrentCell(Cell cell)
+
+Créateur de Tours:
+	Capable de placer une Tour sur une Case de la Grille (fait appel à la fonction publique GetCell(Vector2 coordinates) pour obtenir la Case)
+	Fait appel à la fonction publique CanPlaceTower(Cell cell) de la Grille pour déterminer s'il est possible de placer une Tour à l'endroit choisi
+	Lorsqu'une nouvelle Tour est placée, appel la fonction AddTower(Cell cell) de la Grille pour indiquer qu'une Tour occupe désormais la Case sélectionnée
+		
